@@ -1,10 +1,25 @@
+const whiteList = require('./white_list.json');
+
 module.exports = (robot) => {
-  // Your code here
+
   robot.log('Yay, the app was loaded!')
 
-  // For more information on building apps:
-  // https://probot.github.io/docs/
+  robot.on('issue_comment.created', async context => {
 
-  // To get your app running against GitHub, see:
-  // https://probot.github.io/docs/development/
+    let params;
+    if (whiteList.indexOf(context.payload.issue.user.login) != -1) {
+      if (context.payload.comment.body.includes("/bot try")) {
+        params = context.issue({
+          body: "New build is in process!"
+        })
+      }
+    } else {
+      params = context.issue({
+        body: "You don't authority!"
+      })
+    }
+
+    context.github.issues.createComment(params)
+  })
+
 }
