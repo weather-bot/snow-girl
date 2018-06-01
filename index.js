@@ -1,4 +1,4 @@
-const exec = require('child_process').exec;
+const execSync = require('child_process').execSync;
 const whiteList = require('./white_list.json');
 
 module.exports = (robot) => {
@@ -14,26 +14,20 @@ module.exports = (robot) => {
         params = context.issue({
           body: "New build is in process!"
         })
-        context.github.issues.createComment(params)
+        context.github.issues.createComment(params);
 
-      }
-
-      try {
-        const command = `sh deploy.sh ${prId}`;
-        exec(command, (error, stdout, stderr) => {
-          if (error !== null) {
-            params = context.issue({
-              body: error
-            })
-          } else {
-            params = context.issue({
-              body: `The build for PR#${prId} is success.`
-            })
-          }
-          context.github.issues.createComment(params)
-        });
-      } catch (exceptions) {
-        robot.log(exceptions);
+        try {
+          const command = `sh deploy.sh ${prId}`;
+          execSync(command);
+          params = context.issue({
+            body: `The build for PR#${prId} is success.`
+          })
+        } catch (exceptions) {
+          params = context.issue({
+            body: "Build Exceptions."
+          })
+        }
+        context.github.issues.createComment(params);
       }
     } else {
       params = context.issue({
@@ -41,7 +35,6 @@ module.exports = (robot) => {
       })
       context.github.issues.createComment(params)
     }
-
   })
 
 }

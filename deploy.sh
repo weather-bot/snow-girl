@@ -7,7 +7,7 @@ git checkout -b pr FETCH_HEAD
 rm -rf ~/tmp
 cp -rfv ~/weather-bot ~/tmp
 rm -rf ~/tmp/.git
-cp -rfv ~/tmp ~/test-weather-bot-tw
+cp -rfv ~/tmp/* ~/test-weather-bot-tw
 cd ~/test-weather-bot-tw
 git add -A
 git commit -am "make it better"
