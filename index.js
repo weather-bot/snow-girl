@@ -8,14 +8,15 @@ module.exports = (robot) => {
   robot.on('issue_comment.created', async context => {
     const prId = context.payload.issue.html_url.split("pull/")[1];
     let params;
+    if (context.payload.comment.body.includes("bot try")) {
+      params = context.issue({
+        body: "New build is in process!"
+      })
+      context.github.issues.createComment(params);
+    }      
 
     if (whiteList.indexOf(context.payload.issue.user.login) != -1) {
-      if (context.payload.comment.body.includes("/bot try")) {
-        params = context.issue({
-          body: "New build is in process!"
-        })
-        context.github.issues.createComment(params);
-
+      if (context.payload.comment.body.includes("bot try")) {
         try {
           const command = `sh deploy.sh ${prId}`;
           execSync(command);
