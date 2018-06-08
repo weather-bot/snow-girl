@@ -21,7 +21,7 @@ module.exports = (robot) => {
           const command = `sh deploy.sh ${prId}`;
           execSync(command);
           params = context.issue({
-            body: `The build for PR#${prId} is successful.`
+            body: `The build for PR(#${prId}) is successful.`
           })
         } catch (exceptions) {
           params = context.issue({
