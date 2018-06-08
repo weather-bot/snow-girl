@@ -6,11 +6,11 @@ module.exports = (robot) => {
   robot.log('Yay, the app was loaded!')
 
   robot.on('issue_comment.created', async context => {
-    robbot.log('new issue_comment!')
+    robot.log('new issue_comment!')
     let params;
     if (whiteList.indexOf(context.payload.issue.user.login) != -1) {
       if (context.payload.comment.body.includes("bot try")) {
-        robbot.log('New try start!')        
+        robot.log('New try start!')        
         params = context.issue({
           body: "New build is in process!"
         })
